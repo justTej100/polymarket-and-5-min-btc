@@ -7,7 +7,9 @@ on:
     branches: [main]
 
 jobs:
-  lint-and-test:
+  # 1. Does the Next.js app build with no real database available?
+  build-no-db:
+    name: Build (no database)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,11 +22,85 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Typecheck
-        run: npm run typecheck
-
-      - name: Test
-        run: npm run test
+      - name: Generate Prisma clients
+        # prisma generate only reads the schema — it never connects to a
+        # database — so this is safe with no real DATABASE_URL/NEON_DATABASE_URL.
+        run: |
+          npm run prisma:generate
+          npm run prisma:generate:neon
 
       - name: Build
         run: npm run build
+
+  # 2. Does everything work against a real database (local sqlite + a real
+  #    Postgres standing in for Neon), migrations included?
+  build-with-db:
+    name: Build + migrate (with database)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: polymarket
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: file:./dev.db
+      NEON_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/polymarket
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Migrate local SQLite schema
+        run: npx prisma migrate deploy
+
+      - name: Migrate Neon/Postgres schema
+        run: npx prisma migrate deploy --schema prisma/neon/schema.prisma
+
+      - name: Build with a database configured
+        run: npm run build
+
+  # 3. Typecheck + tests (unit tests now; UI/e2e tests can be added as a
+  #    separate step here once the project has a browser-testing setup).
+  test:
+    name: Typecheck & tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma clients
+        run: |
+          npm run prisma:generate
+          npm run prisma:generate:neon
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm test
+
+      # - name: UI tests
+      #   run: npx playwright test
+      #   (no UI test setup yet — add this once Playwright/Cypress is installed)
