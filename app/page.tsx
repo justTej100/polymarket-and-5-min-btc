@@ -1,6 +1,12 @@
+"use client";
+
 import Link from "next/link";
+import { useLiveStream } from "@/lib/hooks/useLiveStream";
+import { MarketEmbed } from "@/components/MarketEmbed";
 
 export default function Home() {
+  const { data, connected } = useLiveStream();
+
   return (
     <>
       <p className="page-title">Home</p>
@@ -13,6 +19,13 @@ export default function Home() {
           against the real bid/ask so you can see, in real time, which rules
           would actually make money.
         </p>
+
+        <MarketEmbed
+          snapshot={data?.snapshot ?? null}
+          history={data?.history ?? []}
+          connected={connected}
+          mode="live"
+        />
 
         <div className="home__cards">
           <Link href="/board" className="home__card">
@@ -38,12 +51,12 @@ export default function Home() {
         </div>
 
         <a
-          href="https://github.com/YOUR_USERNAME/polymarket-and-5-min-btc"
+          href="https://github.com/justTej100/polymarket-and-5-min-btc"
           target="_blank"
           rel="noreferrer"
           className="home__repo"
         >
-          View the source on GitHub →
+          View the source on GitHub
         </a>
       </div>
     </>

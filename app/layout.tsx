@@ -13,9 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <div className="nav-bar">
           <nav className="nav">
-            <span className="nav__brand">
-              STRAT<span>BOARD</span>
-            </span>
+          
             <NavLinks />
           </nav>
         </div>
