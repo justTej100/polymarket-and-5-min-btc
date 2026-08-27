@@ -125,6 +125,165 @@ a {
   margin: 0 0 16px;
 }
 
+/* ---------- home ---------- */
+
+.home {
+  padding: 8px 4px 0;
+}
+
+.home__title {
+  font-size: 28px;
+  line-height: 1.25;
+  margin: 0 0 14px;
+  max-width: 640px;
+}
+
+.home__lede {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 620px;
+  margin: 0 0 32px;
+}
+
+.home__cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 32px;
+}
+
+.home__card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel);
+  text-decoration: none;
+  transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+}
+
+.home__card:hover {
+  border-color: var(--border-strong);
+  background: var(--panel-raised);
+  transform: translateY(-2px);
+}
+
+.home__card-title {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.home__card-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.home__repo {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.home__repo:hover {
+  text-decoration: underline;
+}
+
+/* ---------- strategy page ---------- */
+
+.strategy-intro {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+  max-width: 640px;
+  margin: 0 0 22px;
+}
+
+/* ---------- leaderboard filters ---------- */
+
+.leaderboard-filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+
+.leaderboard-filters__group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.leaderboard-filters__label {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.leaderboard-filters__pills {
+  display: flex;
+  gap: 6px;
+}
+
+.leaderboard-filters__pill {
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+
+.leaderboard-filters__pill:hover {
+  color: var(--text);
+}
+
+.leaderboard-filters__pill--active {
+  color: var(--text);
+  background: rgba(139, 92, 246, 0.16);
+  border-color: rgba(139, 92, 246, 0.45);
+  font-weight: 600;
+}
+
+.leaderboard-filters__toggle {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.leaderboard-empty {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+@media (max-width: 720px) {
+  .home__cards {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ---------- market embed ---------- */
 
 .market-embed {

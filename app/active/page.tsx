@@ -1,28 +1,7 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import { useLiveStream } from "@/lib/hooks/useLiveStream";
-import { MarketEmbed } from "@/components/MarketEmbed";
-import { StrategyBoard } from "@/components/StrategyBoard";
-import { StrategyExplainer } from "@/components/StrategyExplainer";
-import { PaperLeaderboard } from "@/components/PaperLeaderboard";
-import { CopyTradingPanel } from "@/components/CopyTradingPanel";
-
+// Kept for backward compatibility with old links/bookmarks -- the live
+// market + strategy board now lives at /board.
 export default function ActivePage() {
-  const { data, connected } = useLiveStream();
-
-  return (
-    <>
-      <p className="page-title">Live — Polymarket BTC 5-min Up/Down</p>
-      <MarketEmbed
-        snapshot={data?.snapshot ?? null}
-        history={data?.history ?? []}
-        connected={connected}
-        mode="live"
-      />
-      {data?.paper && <PaperLeaderboard paper={data.paper} />}
-      {data?.copy && <CopyTradingPanel copy={data.copy} strategies={data.signals} />}
-      <StrategyBoard signals={data?.signals ?? []} />
-      <StrategyExplainer signals={data?.signals ?? []} />
-    </>
-  );
+  redirect("/board");
 }
