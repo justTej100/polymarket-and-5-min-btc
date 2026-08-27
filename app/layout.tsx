@@ -11,15 +11,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <div className="shell">
+        <div className="nav-bar">
           <nav className="nav">
             <span className="nav__brand">
               STRAT<span>BOARD</span>
             </span>
             <NavLinks />
           </nav>
-          {children}
         </div>
+        <div className="shell">{children}</div>
       </body>
     </html>
   );

@@ -1,8 +1,9 @@
 /*
   Design direction: sleek trading-terminal dark theme with a Polymarket
-  accent language -- green (#22c55e) for Up, red (#ef4444) for Down, cyan for
-  the arbitrage "BOTH" state. Glassy raised panels over a deep navy-black
-  ground, monospace for anything that ticks, soft glows on live elements.
+  accent language -- blue (#2563eb) as the primary accent, green (#22c55e)
+  for Up, red (#ef4444) for Down, cyan for the arbitrage "BOTH" state.
+  Glassy raised panels over a deep navy-black ground, monospace for anything
+  that ticks, soft glows on live elements.
 */
 
 :root {
@@ -14,7 +15,7 @@
   --border-strong: rgba(255, 255, 255, 0.14);
   --text: #eceef2;
   --text-muted: #8b93a1;
-  --accent: #8b5cf6;
+  --accent: #2563eb;
   --up: #22c55e;
   --down: #ef4444;
   --both: #38bdf8;
@@ -41,7 +42,7 @@ body {
 
 body {
   background-image:
-    radial-gradient(1000px 500px at 50% -10%, rgba(139, 92, 246, 0.09), transparent 65%),
+    radial-gradient(1000px 500px at 50% -10%, rgba(37, 99, 235, 0.09), transparent 65%),
     radial-gradient(800px 400px at 90% 0%, rgba(34, 197, 94, 0.05), transparent 60%),
     radial-gradient(circle at 50% 0%, var(--bg-glow) 0%, var(--bg) 60%);
   min-height: 100vh;
@@ -52,7 +53,7 @@ a {
 }
 
 ::selection {
-  background: rgba(139, 92, 246, 0.35);
+  background: rgba(37, 99, 235, 0.35);
 }
 
 /* ---------- shell / nav ---------- */
@@ -63,19 +64,26 @@ a {
   padding: 28px 20px 80px;
 }
 
-.nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 26px;
-  padding: 12px 18px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+/* Full-bleed bar spanning the entire viewport width, edge to edge. */
+.nav-bar {
+  width: 100%;
+  border-bottom: 1px solid var(--border);
   background: var(--panel);
   backdrop-filter: blur(14px);
 }
 
+.nav {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  padding: 0 28px;
+  gap: 32px;
+}
+
 .nav__brand {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
   font-family: var(--mono);
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -88,19 +96,25 @@ a {
   font-weight: 700;
 }
 
+/* Tabs share the rest of the bar equally, so the whole nav stretches to
+   fill the screen width instead of clustering on one side. */
 .nav__links {
   display: flex;
-  gap: 6px;
+  flex: 1;
+  gap: 4px;
 }
 
 .nav__link {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--mono);
   font-size: 13px;
-  padding: 7px 16px;
-  border-radius: 999px;
+  padding: 16px 16px;
   text-decoration: none;
   color: var(--text-muted);
-  border: 1px solid transparent;
+  border-bottom: 2px solid transparent;
   transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease;
 }
 
@@ -111,8 +125,8 @@ a {
 
 .nav__link--active {
   color: var(--text);
-  background: rgba(139, 92, 246, 0.16);
-  border-color: rgba(139, 92, 246, 0.45);
+  background: rgba(37, 99, 235, 0.12);
+  border-color: var(--accent);
   font-weight: 600;
 }
 
@@ -258,8 +272,8 @@ a {
 
 .leaderboard-filters__pill--active {
   color: var(--text);
-  background: rgba(139, 92, 246, 0.16);
-  border-color: rgba(139, 92, 246, 0.45);
+  background: rgba(37, 99, 235, 0.16);
+  border-color: rgba(37, 99, 235, 0.45);
   font-weight: 600;
 }
 
@@ -1510,6 +1524,16 @@ a {
 @media (max-width: 640px) {
   .shell {
     padding: 16px 12px 64px;
+  }
+
+  .nav {
+    padding: 0 12px;
+    gap: 12px;
+  }
+
+  .nav__link {
+    padding: 14px 6px;
+    font-size: 11px;
   }
 
   .market-embed__top {
