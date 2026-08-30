@@ -11,7 +11,7 @@ export default function StrategyPage() {
       <p className="page-title">Strategy — what each rule-based strategy is watching for</p>
       <p className="strategy-intro">
         Each strategy below reacts to the same live market feed as the Board
-        tab — the badges here update in real time too. For the full visual
+        tab. The badges here update in real time too. For the full visual
         picture of who's leaning Up vs Down right now, head to Board; this
         page is for understanding the "why" behind each call.
       </p>

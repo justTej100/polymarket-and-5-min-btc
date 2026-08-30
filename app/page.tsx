@@ -14,8 +14,8 @@ export default function Home() {
         <h1 className="home__title">Watching Polymarket's 5-min BTC Up/Down markets</h1>
         <p className="home__lede">
           9 independent, rule-based strategies watch Polymarket's 5-minute BTC
-          Up/Down markets live — real Chainlink price feed, real order book,
-          no refresh needed — and each trades a $1,000 imaginary bankroll
+          Up/Down markets live. Real Chainlink price feed, real order book,
+          no refresh needed and each strategy trades a $1,000 imaginary bankroll
           against the real bid/ask so you can see, in real time, which rules
           would actually make money.
         </p>
