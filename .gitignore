@@ -1,11 +1,21 @@
-node_modules
-.next
+﻿# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+
+# Secrets
 .env
 .env.local
-*.log
-tsconfig.tsbuildinfo
+
+# Local SQLite
 *.db
 *.db-journal
 *.db-shm
 *.db-wal
-prisma/generated/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.log
