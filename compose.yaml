@@ -1,0 +1,35 @@
+services:
+  board:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      # Optional: the board runs fine with no .env at all (paper trading only,
+      # no signal history). Copy .env.example to .env to add a database or
+      # real-money copy trading.
+      - path: .env
+        required: false
+    environment:
+      PORT: 8000
+    restart: unless-stopped
+
+    develop:
+      watch:
+        # Frontend edits appear on refresh -- no restart, no rebuild.
+        - action: sync
+          path: ./polymarket/static
+          target: /app/polymarket/static
+
+        # Backend edits restart the process so the new code is loaded.
+        # (static/ is excluded so it only ever matches the sync rule above.)
+        - action: sync+restart
+          path: ./polymarket
+          target: /app/polymarket
+          ignore:
+            - static/
+
+        # Dependency changes need the image rebuilt.
+        - action: rebuild
+          path: ./pyproject.toml
+        - action: rebuild
+          path: ./uv.lock
