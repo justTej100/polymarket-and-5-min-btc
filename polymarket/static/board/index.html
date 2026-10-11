@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Board — BTC 5-Minute Strategy Board</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+  </head>
+  <body>
+    <header class="nav-bar">
+      <nav class="nav">
+        <a class="nav__brand" href="/">BTC <span>5m</span></a>
+        <div class="nav__links">
+          <a class="nav__link" href="/">Home</a>
+          <a class="nav__link nav__link--active" href="/board">Board</a>
+          <a class="nav__link" href="/leaderboard">Leaderboard</a>
+          <a class="nav__link" href="/strategy">Strategy</a>
+          <a class="nav__link" href="/simulation">Simulation</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="shell">
+      <p class="page-title">Board — Live market</p>
+
+      <section class="market-embed" id="market">
+        <div class="market-embed__top">
+          <div class="market-embed__left">
+            <span class="status-dot status-dot--pending" id="status-dot"></span>
+            <span class="market-embed__label" id="market-label">Connecting to the live feed…</span>
+          </div>
+          <div class="market-embed__meta">
+            <span class="market-embed__meta-item" id="meta-strike">Strike —</span>
+            <span class="market-embed__meta-item" id="meta-clock">—:— left</span>
+          </div>
+        </div>
+
+        <div class="outcome-cards">
+          <div class="outcome-card outcome-card--up" id="card-up">
+            <div class="outcome-card__head">
+              <span class="outcome-card__name">▲ Up</span>
+              <span class="outcome-card__chance" id="up-chance">—</span>
+            </div>
+            <div class="outcome-card__quotes">
+              <div class="outcome-card__quote">
+                <span class="outcome-card__quote-label">Buy</span>
+                <span class="outcome-card__quote-value" id="up-buy">—</span>
+              </div>
+              <div class="outcome-card__quote">
+                <span class="outcome-card__quote-label">Sell</span>
+                <span class="outcome-card__quote-value" id="up-sell">—</span>
+              </div>
+            </div>
+          </div>
+          <div class="outcome-card outcome-card--down" id="card-down">
+            <div class="outcome-card__head">
+              <span class="outcome-card__name">▼ Down</span>
+              <span class="outcome-card__chance" id="down-chance">—</span>
+            </div>
+            <div class="outcome-card__quotes">
+              <div class="outcome-card__quote">
+                <span class="outcome-card__quote-label">Buy</span>
+                <span class="outcome-card__quote-value" id="down-buy">—</span>
+              </div>
+              <div class="outcome-card__quote">
+                <span class="outcome-card__quote-label">Sell</span>
+                <span class="outcome-card__quote-value" id="down-sell">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="price-chart">
+          <div class="price-chart__header">
+            <div>
+              <div class="price-chart__label">BTC / USD · Chainlink</div>
+              <div class="price-chart__subline" id="chart-range">waiting for price feed…</div>
+            </div>
+            <div class="price-chart__readout">
+              <div class="price-chart__value" id="chart-price">—</div>
+              <div class="price-chart__delta" id="chart-delta">—</div>
+            </div>
+          </div>
+          <div class="price-chart__canvas" id="chart"></div>
+          <div class="price-chart__footer">
+            <span id="chart-open">open —</span>
+            <span class="price-chart__footer-strike" id="chart-strike">strike —</span>
+            <span id="chart-verdict">—</span>
+          </div>
+        </div>
+
+        <div class="market-embed__stats">
+          <div class="market-embed__stat">
+            <span class="market-embed__stat-label">BTC price</span>
+            <span class="market-embed__stat-value" id="stat-price">—</span>
+          </div>
+          <div class="market-embed__stat">
+            <span class="market-embed__stat-label">Price to beat</span>
+            <span class="market-embed__stat-value" id="stat-strike">—</span>
+          </div>
+          <div class="market-embed__stat">
+            <span class="market-embed__stat-label">Window high</span>
+            <span class="market-embed__stat-value" id="stat-high">—</span>
+          </div>
+          <div class="market-embed__stat">
+            <span class="market-embed__stat-label">Window low</span>
+            <span class="market-embed__stat-value" id="stat-low">—</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="board" id="spatial-board" aria-label="Strategy board"></div>
+
+      <section class="copy" id="copy">
+        <div class="copy__header">
+          <div class="copy__title-wrap">
+            <h2 class="copy__title">Copy Trading</h2>
+            <span class="copy__badge copy__badge--off" id="copy-badge">not connected</span>
+          </div>
+          <span class="copy__address" id="copy-address"></span>
+        </div>
+
+        <div class="copy__setup" id="copy-setup">
+          <p class="copy__setup-lead">
+            Mirror one strategy's trades with real money on your Polymarket account. To connect,
+            add your keys to <code>.env</code> and restart:
+          </p>
+          <pre class="copy__setup-code">POLYMARKET_PRIVATE_KEY="0x..."      # Polymarket -&gt; profile -&gt; Settings -&gt; Export private key
+POLYMARKET_FUNDER_ADDRESS="0x..."   # your Polymarket deposit address (holds your USDC)
+POLYMARKET_SIGNATURE_TYPE="1"       # 1 = email login (default), 2 = browser wallet</pre>
+          <p class="copy__setup-note">
+            Keys stay on your machine — they are only read server-side from .env, never sent to
+            the browser.
+          </p>
+        </div>
+
+        <div id="copy-live" hidden>
+          <div class="copy__controls">
+            <label class="copy__field">
+              <span class="copy__field-label">Copy this strategy</span>
+              <select id="copy-strategy"></select>
+            </label>
+            <label class="copy__field">
+              <span class="copy__field-label">Stake per trade (USD)</span>
+              <input type="number" id="copy-stake" min="1" max="500" step="1" />
+            </label>
+            <div class="copy__toggle-wrap" id="copy-toggle-wrap"></div>
+          </div>
+          <p class="copy__warning" id="copy-warning"></p>
+        </div>
+
+        <p class="copy__error" id="copy-error" hidden></p>
+        <div class="copy__orders" id="copy-orders"></div>
+      </section>
+    </main>
+
+    <script src="/js/core.js"></script>
+    <script>
+      Board.init({ features: ["market", "chart", "spatial", "copy", "live"] });
+    </script>
+  </body>
+</html>
