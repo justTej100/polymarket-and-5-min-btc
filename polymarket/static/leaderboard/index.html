@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Leaderboard — BTC 5-Minute Strategy Board</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header class="nav-bar">
+      <nav class="nav">
+        <a class="nav__brand" href="/">BTC <span>5m</span></a>
+        <div class="nav__links">
+          <a class="nav__link" href="/">Home</a>
+          <a class="nav__link" href="/board">Board</a>
+          <a class="nav__link nav__link--active" href="/leaderboard">Leaderboard</a>
+          <a class="nav__link" href="/strategy">Strategy</a>
+          <a class="nav__link" href="/simulation">Simulation</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="shell">
+      <p class="page-title">Leaderboard — Paper trading</p>
+
+      <section class="paper">
+        <div class="paper__header">
+          <h2 class="paper__title">Paper Trading Leaderboard</h2>
+          <span class="paper__subtitle" id="paper-subtitle">
+            every strategy trades $1,000 of imaginary money · hover a column for what it means
+          </span>
+        </div>
+
+        <div class="leaderboard-filters">
+          <div class="leaderboard-filters__group">
+            <span class="leaderboard-filters__label">Sort by</span>
+            <div class="leaderboard-filters__pills" id="sort-pills">
+              <button type="button" class="leaderboard-filters__pill leaderboard-filters__pill--active" data-sort="cash">Cash</button>
+              <button type="button" class="leaderboard-filters__pill" data-sort="windowPnl">This window</button>
+              <button type="button" class="leaderboard-filters__pill" data-sort="totalPnl">Total P&amp;L</button>
+              <button type="button" class="leaderboard-filters__pill" data-sort="wins">Wins</button>
+            </div>
+          </div>
+          <label class="leaderboard-filters__toggle">
+            <input type="checkbox" id="positioned-only" />
+            In a position now
+          </label>
+        </div>
+
+        <div class="paper__last-window" id="last-window" hidden></div>
+        <div class="paper__table" id="leaderboard"></div>
+
+        <div class="paper__windows" id="windows-section" hidden>
+          <h3 class="paper__windows-title">Past windows</h3>
+          <div class="paper__windows-list" id="windows"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/js/core.js"></script>
+    <script>
+      Board.init({ features: ["leaderboard", "live"] });
+    </script>
+  </body>
+</html>
