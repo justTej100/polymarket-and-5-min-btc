@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Strategy — BTC 5-Minute Strategy Board</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header class="nav-bar">
+      <nav class="nav">
+        <a class="nav__brand" href="/">BTC <span>5m</span></a>
+        <div class="nav__links">
+          <a class="nav__link" href="/">Home</a>
+          <a class="nav__link" href="/board">Board</a>
+          <a class="nav__link" href="/leaderboard">Leaderboard</a>
+          <a class="nav__link nav__link--active" href="/strategy">Strategy</a>
+          <a class="nav__link" href="/simulation">Simulation</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="shell">
+      <p class="page-title">Strategy — Live explainer</p>
+      <p class="strategy-intro">
+        Each card is one rule book. The badge is its current call; the note is why. Paper P&amp;L
+        updates from the same live feed as the board.
+      </p>
+
+      <section class="panel">
+        <div class="panel__header">
+          <h2 class="panel__title">Strategies</h2>
+          <span class="panel__subtitle" id="strategy-count">connecting…</span>
+        </div>
+        <div class="explainer" id="strategies"></div>
+      </section>
+    </main>
+
+    <script src="/js/core.js"></script>
+    <script>
+      Board.init({ features: ["strategies", "live"] });
+    </script>
+  </body>
+</html>
