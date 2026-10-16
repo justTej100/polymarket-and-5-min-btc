@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BTC 5-Minute Strategy Board</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+  </head>
+  <body>
+    <header class="nav-bar">
+      <nav class="nav">
+        <a class="nav__brand" href="/">BTC <span>5m</span></a>
+        <div class="nav__links">
+          <a class="nav__link nav__link--active" href="/">Home</a>
+          <a class="nav__link" href="/board">Board</a>
+          <a class="nav__link" href="/leaderboard">Leaderboard</a>
+          <a class="nav__link" href="/strategy">Strategy</a>
+          <a class="nav__link" href="/simulation">Simulation</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="shell">
+      <p class="page-title">Home</p>
+      <div class="home">
+        <h1 class="home__title">Watching Polymarket's 5-min BTC Up/Down markets</h1>
+        <p class="home__lede">
+          9 independent, rule-based strategies watch Polymarket's 5-minute BTC Up/Down markets
+          live. Real Chainlink price feed, real order book, no refresh needed — and each
+          strategy trades a $1,000 imaginary bankroll against the real bid/ask so you can see
+          which rules would actually make money.
+        </p>
+
+        <section class="market-embed" id="market">
+          <div class="market-embed__top">
+            <div class="market-embed__left">
+              <span class="status-dot status-dot--pending" id="status-dot"></span>
+              <span class="market-embed__label" id="market-label">Connecting to the live feed…</span>
+            </div>
+            <div class="market-embed__meta">
+              <span class="market-embed__meta-item" id="meta-strike">Strike —</span>
+              <span class="market-embed__meta-item" id="meta-clock">—:— left</span>
+            </div>
+          </div>
+          <div class="outcome-cards">
+            <div class="outcome-card outcome-card--up" id="card-up">
+              <div class="outcome-card__head">
+                <span class="outcome-card__name">▲ Up</span>
+                <span class="outcome-card__chance" id="up-chance">—</span>
+              </div>
+              <div class="outcome-card__quotes">
+                <div class="outcome-card__quote">
+                  <span class="outcome-card__quote-label">Buy</span>
+                  <span class="outcome-card__quote-value" id="up-buy">—</span>
+                </div>
+                <div class="outcome-card__quote">
+                  <span class="outcome-card__quote-label">Sell</span>
+                  <span class="outcome-card__quote-value" id="up-sell">—</span>
+                </div>
+              </div>
+            </div>
+            <div class="outcome-card outcome-card--down" id="card-down">
+              <div class="outcome-card__head">
+                <span class="outcome-card__name">▼ Down</span>
+                <span class="outcome-card__chance" id="down-chance">—</span>
+              </div>
+              <div class="outcome-card__quotes">
+                <div class="outcome-card__quote">
+                  <span class="outcome-card__quote-label">Buy</span>
+                  <span class="outcome-card__quote-value" id="down-buy">—</span>
+                </div>
+                <div class="outcome-card__quote">
+                  <span class="outcome-card__quote-label">Sell</span>
+                  <span class="outcome-card__quote-value" id="down-sell">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="home__cards">
+          <a href="/board" class="home__card">
+            <span class="home__card-title">Board</span>
+            <span class="home__card-desc">
+              The live market and every strategy's current call, plotted live.
+            </span>
+          </a>
+          <a href="/leaderboard" class="home__card">
+            <span class="home__card-title">Leaderboard</span>
+            <span class="home__card-desc">
+              Cash, P&amp;L, and win/loss for all 9 strategies, sortable and filterable.
+            </span>
+          </a>
+          <a href="/strategy" class="home__card">
+            <span class="home__card-title">Strategy</span>
+            <span class="home__card-desc">
+              What each strategy is watching for and why it's calling Up or Down.
+            </span>
+          </a>
+        </div>
+
+        <a
+          href="https://github.com/justTej100/polymarket-and-5-min-btc"
+          target="_blank"
+          rel="noreferrer"
+          class="home__repo"
+          >View the source on GitHub</a
+        >
+      </div>
+    </main>
+
+    <script src="/js/core.js"></script>
+    <script>
+      Board.init({ features: ["market", "live"] });
+    </script>
+  </body>
+</html>
