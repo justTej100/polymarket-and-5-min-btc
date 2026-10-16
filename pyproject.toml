@@ -1,0 +1,23 @@
+[project]
+name = "btc-strategy-board"
+version = "0.1.0"
+description = "Live 9-strategy board for Polymarket's 5-minute BTC Up/Down markets"
+requires-python = ">=3.11"
+dependencies = [
+    "websockets>=14.0",
+    "psycopg[binary]>=3.2",
+    "py-clob-client>=0.24.0",
+    "python-dotenv>=1.0.1",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.0"]
+
+# This is an application, not a library: there is nothing to build or install,
+# `uv run polymarket/server.py` just needs the dependencies in the venv.
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

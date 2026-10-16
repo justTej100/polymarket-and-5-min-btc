@@ -1,0 +1,30 @@
+# Render Blueprint: one always-on Web Service for feeds + WebSocket + static UI.
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: btc-strategy-board
+    runtime: docker
+    plan: starter
+    healthCheckPath: /healthz
+    envVars:
+      - key: PORT
+        value: "8000"
+      - key: LOG_LEVEL
+        value: INFO
+      - key: NEON_DATABASE_URL
+        sync: false
+      - key: DATABASE_URL
+        value: file:./dev.db
+      - key: POLYMARKET_PRIVATE_KEY
+        sync: false
+      - key: POLYMARKET_FUNDER_ADDRESS
+        sync: false
+      - key: POLYMARKET_SIGNATURE_TYPE
+        value: "1"
+      - key: COPY_STRATEGY_ID
+        value: momentum-confluence
+      - key: COPY_STAKE_USD
+        value: "5"
+      - key: COPY_TRADING_ENABLED
+        value: "false"
