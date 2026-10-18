@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>BTC 5-Minute Strategy Board</title>
     <link rel="stylesheet" href="/style.css" />
-    <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
   </head>
   <body>
     <header class="nav-bar">
@@ -15,7 +14,6 @@
           <a class="nav__link nav__link--active" href="/">Home</a>
           <a class="nav__link" href="/board">Board</a>
           <a class="nav__link" href="/leaderboard">Leaderboard</a>
-          <a class="nav__link" href="/strategy">Strategy</a>
           <a class="nav__link" href="/simulation">Simulation</a>
         </div>
       </nav>
@@ -79,6 +77,19 @@
           </div>
         </section>
 
+        <p class="strategy-intro">
+          Each card is one rule book. The badge is its current call; the note is why. Paper P&amp;L
+          updates from the same live feed as the board.
+        </p>
+
+        <section class="panel">
+          <div class="panel__header">
+            <h2 class="panel__title">Strategies</h2>
+            <span class="panel__subtitle" id="strategy-count">connecting…</span>
+          </div>
+          <div class="explainer" id="strategies"></div>
+        </section>
+
         <div class="home__cards">
           <a href="/board" class="home__card">
             <span class="home__card-title">Board</span>
@@ -92,10 +103,10 @@
               Cash, P&amp;L, and win/loss for all 9 strategies, sortable and filterable.
             </span>
           </a>
-          <a href="/strategy" class="home__card">
-            <span class="home__card-title">Strategy</span>
+          <a href="/simulation" class="home__card">
+            <span class="home__card-title">Simulation</span>
             <span class="home__card-desc">
-              What each strategy is watching for and why it's calling Up or Down.
+              Replay a recent resolved window tick-by-tick through the same strategies.
             </span>
           </a>
         </div>
@@ -112,7 +123,7 @@
 
     <script src="/js/core.js"></script>
     <script>
-      Board.init({ features: ["market", "live"] });
+      Board.init({ features: ["market", "strategies", "live"] });
     </script>
   </body>
 </html>
