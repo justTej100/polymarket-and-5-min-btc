@@ -14,11 +14,8 @@ history), so the strike is approximated by the window's opening kline.
 from __future__ import annotations
 
 import asyncio
-import json
 import logging
 import random
-import urllib.error
-import urllib.request
 from typing import Optional
 
 from polymarket.feed.gamma_client import (
@@ -26,6 +23,7 @@ from polymarket.feed.gamma_client import (
     fetch_btc_market_for_window,
     window_start_sec,
 )
+from polymarket.feed.http import get_json
 from polymarket.feed.synthetic import HistoricalWindow
 from polymarket.strategies.base import MarketSnapshot
 
@@ -36,14 +34,6 @@ REQUEST_TIMEOUT_SECONDS = 15
 log = logging.getLogger("historical")
 
 
-def _get_json(url: str):
-    request = urllib.request.Request(url, headers={"Accept": "application/json"})
-    with urllib.request.urlopen(request, timeout=REQUEST_TIMEOUT_SECONDS) as response:
-        if response.status != 200:
-            raise RuntimeError(f"request failed: {response.status} for {url}")
-        return json.loads(response.read().decode("utf-8"))
-
-
 async def _fetch_token_price_history(
     token_id: str, start_sec: int, end_sec: int
 ) -> list[dict]:
@@ -51,7 +41,7 @@ async def _fetch_token_price_history(
         f"{CLOB_REST_BASE}/prices-history?market={token_id}"
         f"&startTs={start_sec}&endTs={end_sec}&fidelity=1"
     )
-    data = await asyncio.to_thread(_get_json, url)
+    data = await asyncio.to_thread(get_json, url, REQUEST_TIMEOUT_SECONDS)
     history = data.get("history") if isinstance(data, dict) else None
     return history if isinstance(history, list) else []
 
@@ -62,7 +52,7 @@ async def _fetch_btc_klines(start_sec: int, end_sec: int) -> list[dict]:
         f"&startTime={start_sec * 1000}&endTime={end_sec * 1000}"
         f"&limit={WINDOW_SECONDS}"
     )
-    rows = await asyncio.to_thread(_get_json, url)
+    rows = await asyncio.to_thread(get_json, url, REQUEST_TIMEOUT_SECONDS)
     if not isinstance(rows, list):
         raise RuntimeError("Binance klines returned unexpected payload")
     return [

@@ -13,11 +13,12 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
-import urllib.request
 from dataclasses import dataclass
 from typing import Awaitable, Callable, Optional
 
 import websockets
+
+from polymarket.feed.http import get_json
 
 CLOB_WS_URL = "wss://ws-subscriptions-clob.polymarket.com/ws/market"
 CLOB_REST_BASE = "https://clob.polymarket.com"
@@ -59,18 +60,16 @@ def best_ask(asks: Optional[list]) -> Optional[float]:
     return best if best != float("inf") else None
 
 
-def _get_json(url: str) -> dict:
-    request = urllib.request.Request(url, headers={"Accept": "application/json"})
-    with urllib.request.urlopen(request, timeout=REQUEST_TIMEOUT_SECONDS) as response:
-        return json.loads(response.read().decode("utf-8"))
-
-
 async def seed_order_books(token_ids: list[str]) -> dict[str, TokenQuote]:
     """One-shot REST fetch of both books, so the first snapshot has real quotes."""
 
     async def fetch(token_id: str) -> tuple[str, Optional[TokenQuote]]:
         try:
-            book = await asyncio.to_thread(_get_json, f"{CLOB_REST_BASE}/book?token_id={token_id}")
+            book = await asyncio.to_thread(
+                get_json, f"{CLOB_REST_BASE}/book?token_id={token_id}", REQUEST_TIMEOUT_SECONDS
+            )
+            if not isinstance(book, dict):
+                return token_id, None
             return token_id, TokenQuote(bid=best_bid(book.get("bids")), ask=best_ask(book.get("asks")))
         except Exception as err:  # noqa: BLE001
             log.warning("failed to seed book for token %s...: %s", token_id[:8], err)

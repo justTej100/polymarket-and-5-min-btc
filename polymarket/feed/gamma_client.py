@@ -20,9 +20,10 @@ import math
 import re
 import time
 import urllib.error
-import urllib.request
 from dataclasses import dataclass
 from typing import Optional
+
+from polymarket.feed.http import get_json
 
 GAMMA_BASE = "https://gamma-api.polymarket.com"
 
@@ -90,14 +91,6 @@ def _parse_market(market: dict, start_sec: int) -> ActiveMarketMeta:
     )
 
 
-def _get_json(url: str) -> dict:
-    request = urllib.request.Request(url, headers={"Accept": "application/json"})
-    with urllib.request.urlopen(request, timeout=REQUEST_TIMEOUT_SECONDS) as response:
-        if response.status != 200:
-            raise RuntimeError(f"Gamma API request for {url} failed: {response.status}")
-        return json.loads(response.read().decode("utf-8"))
-
-
 async def fetch_btc_market_for_window(start_sec: int) -> ActiveMarketMeta:
     """Fetches one specific 5-min BTC window by its deterministic start
     timestamp. Works for past (resolved) windows too via the /markets/slug
@@ -106,11 +99,11 @@ async def fetch_btc_market_for_window(start_sec: int) -> ActiveMarketMeta:
     slug = slug_for_window(start_sec)
     url = f"{GAMMA_BASE}/markets/slug/{slug}"
     try:
-        market = await asyncio.to_thread(_get_json, url)
+        market = await asyncio.to_thread(get_json, url, REQUEST_TIMEOUT_SECONDS)
     except urllib.error.HTTPError as err:
         raise RuntimeError(f"Gamma API request for {slug} failed: {err.code}") from err
 
-    if not market or not market.get("conditionId"):
+    if not isinstance(market, dict) or not market.get("conditionId"):
         raise RuntimeError(f"No BTC 5-min market found for {slug}")
     return _parse_market(market, start_sec)
 
