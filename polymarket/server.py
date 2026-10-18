@@ -6,8 +6,9 @@ the live feed share a single port with nothing but the standard library and
 `websockets` in between.
 
     GET /                 -> static/index.html (home)
-    GET /board, /leaderboard, /strategy, /simulation -> static pages
+    GET /board, /leaderboard, /simulation -> static pages
     GET /active           -> redirect to /board
+    GET /strategy         -> redirect to / (strategies live on home)
     GET /api/backtest     -> historical or synthetic window + per-tick signals
     GET /js/..., /css/... -> static files
     GET /healthz          -> plaintext ok
@@ -103,6 +104,14 @@ async def process_request(
             b"",
             "text/plain; charset=utf-8",
             extra_headers=[("Location", "/board")],
+        )
+
+    if path == "/strategy" or path == "/strategy/":
+        return _response(
+            HTTPStatus.FOUND,
+            b"",
+            "text/plain; charset=utf-8",
+            extra_headers=[("Location", "/")],
         )
 
     if path == BACKTEST_PATH:
