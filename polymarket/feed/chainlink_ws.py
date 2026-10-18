@@ -45,6 +45,9 @@ class ChainlinkStream:
         self._scope = f"rtds:{symbol.split('/')[0]}"
 
     def _subscribe_message(self) -> str:
+        # Symbol-scoped filters only return a one-shot backfill and then go
+        # silent -- no live `update` frames. Empty filters stream every
+        # Chainlink pair; we keep self.symbol in _handle_message.
         return json.dumps(
             {
                 "action": "subscribe",
@@ -52,7 +55,7 @@ class ChainlinkStream:
                     {
                         "topic": "crypto_prices_chainlink",
                         "type": "*",
-                        "filters": json.dumps({"symbol": self.symbol}),
+                        "filters": "",
                     }
                 ],
             }
@@ -92,16 +95,23 @@ class ChainlinkStream:
     async def _handle_message(self, msg: dict) -> None:
         if not isinstance(msg, dict):
             return
+        # Docs say crypto_prices_chainlink; the live socket currently also
+        # delivers Chainlink prints under crypto_prices with symbol btc/usd.
         topic = msg.get("topic")
-        if topic and topic != "crypto_prices_chainlink":
+        if topic and topic not in ("crypto_prices_chainlink", "crypto_prices"):
             return
         payload = msg.get("payload")
-        if not payload:
+        if not isinstance(payload, dict):
+            return
+
+        # BTC and ETH share the feed -- only keep our symbol.
+        symbol = payload.get("symbol")
+        if symbol and str(symbol).lower() != self.symbol.lower():
             return
 
         # Subscribe responses carry a per-second backfill array; live updates
         # carry a single { timestamp, value } payload.
-        data = payload.get("data") if isinstance(payload, dict) else None
+        data = payload.get("data")
         if isinstance(data, list):
             ticks = []
             for point in data:
@@ -112,7 +122,7 @@ class ChainlinkStream:
                 await self._on_ticks(ticks, True)
             return
 
-        if isinstance(payload, dict) and payload.get("value") is not None:
+        if payload.get("value") is not None:
             tick = _to_tick(payload)
             if tick:
                 await self._on_ticks([tick], False)
