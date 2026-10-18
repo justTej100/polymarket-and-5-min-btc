@@ -19,12 +19,12 @@ docker compose up --watch   # http://localhost:8000
 
 | Route | What it shows |
 | --- | --- |
-| `/` | Home — intro, live market embed, links |
+| `/` | Home — intro, live market embed, strategy explainer |
 | `/board` | Live chart, spatial strategy board, copy trading |
 | `/leaderboard` | Paper standings, sort/filter, trade ledgers |
-| `/strategy` | Per-strategy explainer with live badges |
 | `/simulation` | Play/pause/scrub over a historical or synthetic window |
 | `/active` | Redirects to `/board` (bookmark compat) |
+| `/strategy` | Redirects to `/` (bookmark compat) |
 
 ## What you get
 
